@@ -1,26 +1,8 @@
 import pygame
+from game import Game
 pygame.init()
 
-# Creez une seconde classe qui va representer notre jeux 
-class Game:
-    def __init__(self):
-        # Generer notre joueur
-        self.player = Player()
-        
-
-# Creez une premiere class qui va representer notre joueur
-class Player(pygame.sprite.Sprite): 
-    def __init__(self):
-        super().__init__()
-        self.health = 100
-        self.max_health = 100
-        self.attack = 10
-        self.velocity = 5
-        self.image = pygame.image.load('assets/player.png')
-        self.rect = self.image.get_rect()
-        self.rect.x = 400
-        self.rect.y = 500
-    
+   
 
 # Générer la fenêtre de notre jeux
 
@@ -47,6 +29,16 @@ while running:
     # Appliquer l'image de mon joueur
     screen.blit(game.player.image , game.player.rect)
 
+    # verifier si le joueur souhaite allez à gauche ou à droite
+    if game.pressed.get(pygame.K_RIGHT) and game.player.rect.x + game.player.rect.width < screen.get_width():
+        game.player.move_right()
+
+    elif game.pressed.get(pygame.K_LEFT) and game.player.rect.x> 0:
+        game.player.move_left()
+
+    print(game.player.rect.x)
+
+
     # mettre à jour notre écran
     pygame.display.flip()
 
@@ -59,3 +51,9 @@ while running:
             running = False
             pygame.quit()
             print("Fermeture du jeux")
+        # detecter si un joueur lache une touche du clavier
+        elif event.type == pygame.KEYDOWN:
+            game.pressed[event.key] = True
+        elif event.type == pygame.KEYUP:
+            game.pressed[event.key] = False
+       
