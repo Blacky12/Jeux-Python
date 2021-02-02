@@ -1,4 +1,5 @@
 import pygame
+import math # Importe le module math qui permet de faire plusieur calcul (arrondi,ect)
 from game import Game
 pygame.init()
 
@@ -13,6 +14,19 @@ screen = pygame.display.set_mode((1080,720))
 # Importer de charger l'arrière plan de notre jeux 
 background = pygame.image.load("assets/bg.jpg")
 
+# Importer charger notre bannière (pygame.transform.scale(banner,(500,500)) --> Fonction qui permet de zommer ou dézoomer une image (image,dim))
+banner = pygame.image.load('assets/banner.png')
+banner = pygame.transform.scale(banner, (500,500))
+banner_rect = banner.get_rect() # Fonction pour récupérer le rectangle associé à cette image
+banner_rect.x = math.ceil(screen.get_width() / 4 ) # Screen represente la fenetetre et width pour récuper la largeur
+
+# Importer charger notre bouton pour lancer la partie
+play_button = pygame.image.load('assets/button.png')
+play_button = pygame.transform.scale(play_button,(400,150))
+play_button_rect = play_button.get_rect()
+play_button_rect.x = math.ceil(screen.get_width() / 3.33 )
+play_button_rect.y = math.ceil(screen.get_height() / 2) # La fonction get_height() permet de récupérer la hauteur
+
 # Charger notre jeu
 game = Game()
 
@@ -26,33 +40,16 @@ while running:
     # Appliquer l'arrière plan
     screen.blit(background, (0,-200))
 
-    # Appliquer l'image de mon joueur
-    screen.blit(game.player.image , game.player.rect)
-
-    # Appliquer la barre de vie de mon joueur
-    game.player.update_healht_bar(screen)
-
-    # Récupérer les porjectile du joueur
-    for projectile in game.player.all_projectiles:
-        projectile.move()
-
-    # Récupérer les monstre de notre jeu
-    for monster in game.all_monsters:
-        monster.forward()
-        monster.update_healht_bar(screen)
-
-    # Appliquer l'enssemble des image de mon groupe de projectile
-    game.player.all_projectiles.draw(screen)
-
-    # Appliquer l'enssemble des images de mon groupe de monstre
-    game.all_monsters.draw(screen)
-
-    # verifier si le joueur souhaite allez à gauche ou à droite
-    if game.pressed.get(pygame.K_RIGHT) and game.player.rect.x + game.player.rect.width < screen.get_width():
-        game.player.move_right()
-
-    elif game.pressed.get(pygame.K_LEFT) and game.player.rect.x> 0:
-        game.player.move_left()
+    # Verifier si notre jeu à commencé ou non
+    if game.is_playing:
+        # Déclencher les instruction de la partie
+        game.update(screen)
+    # Verifier si notre jeu n'a pas commencé
+    else:
+        # Ajouter mon ecran de bienvenue (screen.blit() --> Fonction qui permet d'injecter une image sur l'écran)
+        screen.blit(play_button,play_button_rect)
+        screen.blit(banner,banner_rect)
+        
 
     # print(game.player.rect.x)
 
@@ -81,4 +78,10 @@ while running:
 
         elif event.type == pygame.KEYUP:
             game.pressed[event.key] = False
-       
+
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Verification pour savoir si la souris est en collision avec le bouton jouer
+            if play_button_rect.collidepoint(event.pos): # Méthode collidepoint() --> Méthode qui permet de verifier si notre boutton correspond à notre souris au moment du clik
+                # Mettre le jeu en mode "lancé"
+                game.start()

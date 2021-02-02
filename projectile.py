@@ -35,7 +35,7 @@ class Projectile(pygame.sprite.Sprite):
             # Supprimer le projectile
             self.remove()
             # Infliger des dégats
-            monster.damage(self.player.attack)     
+            monster.damage(self.player.attack)
         
 
         # Vérifier si notre projectiles n'est plus présent sur l'écran
