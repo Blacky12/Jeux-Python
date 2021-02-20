@@ -3,7 +3,7 @@ import math # Importe le module math qui permet de faire plusieur calcul (arrond
 from game import Game
 pygame.init()
 
-   
+
 
 # Générer la fenêtre de notre jeux
 
@@ -24,9 +24,9 @@ banner_rect.x = math.ceil(screen.get_width() / 4 ) # Screen represente la fenete
 play_button = pygame.image.load('assets/button.png')
 play_button = pygame.transform.scale(play_button,(400,150))
 play_button_rect = play_button.get_rect()
-play_button_rect.x = math.ceil(screen.get_width() / 3.33 )
+play_button_rect.x = math.ceil(screen.get_width() / 3.33 ) # La fonction get_width() permet de récupérer la hauteur
 play_button_rect.y = math.ceil(screen.get_height() / 2) # La fonction get_height() permet de récupérer la hauteur
-
+     
 # Charger notre jeu
 game = Game()
 
@@ -85,3 +85,5 @@ while running:
             if play_button_rect.collidepoint(event.pos): # Méthode collidepoint() --> Méthode qui permet de verifier si notre boutton correspond à notre souris au moment du clik
                 # Mettre le jeu en mode "lancé"
                 game.start()
+
+
