@@ -3,6 +3,10 @@ import math # Importe le module math qui permet de faire plusieur calcul (arrond
 from game import Game
 pygame.init()
 
+# Definir une clock
+clock = pygame.time.Clock()
+FPS = 60
+
 
 
 # Générer la fenêtre de notre jeux
@@ -73,8 +77,13 @@ while running:
             # Detecter si la touche espace est enclenchée pour lancer notre projectile
 
             if event.key == pygame.K_SPACE:
-                game.player.launch_projectile()
-
+                if game.is_playing:
+                    game.player.launch_projectile()
+                else:
+                    # Mettre le jeu en mode "lancé"
+                    game.start()
+                    # Jouer le son en question
+                    game.sound_manager.play('click')
 
         elif event.type == pygame.KEYUP:
             game.pressed[event.key] = False
@@ -85,5 +94,9 @@ while running:
             if play_button_rect.collidepoint(event.pos): # Méthode collidepoint() --> Méthode qui permet de verifier si notre boutton correspond à notre souris au moment du clik
                 # Mettre le jeu en mode "lancé"
                 game.start()
+                # Jouer le son en question
+                game.sound_manager.play('click')
+    # Fixer le nombre de fps sur ma clock
+    clock.tick(FPS)
 
 
